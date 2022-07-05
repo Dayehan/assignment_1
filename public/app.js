@@ -34160,18 +34160,75 @@
 	  }
 	})(jsxRuntime);
 
+	function GameOver(props) {
+	  const timeSpent = Date.now() - props.time;
+
+	  const handleClick = () => {
+	    // props.changeMode(2);
+	    props.reset();
+	    props.changeCount(count + 1);
+	  };
+
+	  return /*#__PURE__*/jsxRuntime.exports.jsxs("div", {
+	    className: "display",
+	    children: [/*#__PURE__*/jsxRuntime.exports.jsx("p", {
+	      id: "won",
+	      children: "Congratulations you are a fabulous Mathematician!!!"
+	    }), /*#__PURE__*/jsxRuntime.exports.jsx("br", {}), /*#__PURE__*/jsxRuntime.exports.jsxs("p", {
+	      children: ["You spent ", timeSpent, " milliseconds playing "]
+	    }), /*#__PURE__*/jsxRuntime.exports.jsx("button", {
+	      id: "start-button",
+	      onClick: handleClick,
+	      autoFocus: true,
+	      children: "Play again?"
+	    })]
+	  });
+	}
+
 	function GamePlay(props) {
 	  const firstNumber = Math.floor(Math.random() * 10);
 	  const secondNumber = Math.floor(Math.random() * 10);
-	  let answer;
-	  return /*#__PURE__*/jsxRuntime.exports.jsx("div", {
-	    children: /*#__PURE__*/jsxRuntime.exports.jsxs("p", {
-	      children: [/*#__PURE__*/jsxRuntime.exports.jsx("span", {
-	        children: firstNumber
-	      }), "+", /*#__PURE__*/jsxRuntime.exports.jsx("span", {
-	        children: secondNumber
-	      }), " = ", answer]
-	    })
+	  let sign;
+
+	  const result = () => {
+	    const choice = Math.floor(Math.random() * 2);
+
+	    if (choice == 0) {
+	      sign = '+';
+	      return firstNumber + secondNumber;
+	    } else {
+	      sign = '*';
+	      return firstNumber * secondNumber;
+	    }
+	  };
+
+	  const answer = result();
+
+	  const handleInputChange = e => {
+	    if (answer == e.target.value && props.count < props.round) {
+	      e.target.value = "";
+	      props.changeCount(props.count + 1);
+	    } else if (answer == e.target.value && props.count == props.round) {
+	      props.changeMethod(3);
+	    }
+	  };
+
+	  return /*#__PURE__*/jsxRuntime.exports.jsxs("div", {
+	    className: "box",
+	    children: [/*#__PURE__*/jsxRuntime.exports.jsx("p", {
+	      className: "circle",
+	      children: firstNumber
+	    }), " ", /*#__PURE__*/jsxRuntime.exports.jsx("p", {
+	      children: sign
+	    }), " ", /*#__PURE__*/jsxRuntime.exports.jsx("p", {
+	      className: "circle",
+	      children: secondNumber
+	    }), " ", /*#__PURE__*/jsxRuntime.exports.jsx("p", {
+	      children: "="
+	    }), /*#__PURE__*/jsxRuntime.exports.jsx("input", {
+	      onChange: handleInputChange,
+	      autoFocus: true
+	    })]
 	  });
 	}
 
@@ -34179,6 +34236,15 @@
 	  const [name, setName] = react.exports.useState({
 	    firstName: ''
 	  });
+
+	  const handleClick = () => {
+	    props.changeMethod(2);
+	  };
+
+	  const handleChange = e => {
+	    props.changeRounds(e.target.value);
+	  };
+
 	  return /*#__PURE__*/jsxRuntime.exports.jsxs("div", {
 	    className: "box",
 	    children: [/*#__PURE__*/jsxRuntime.exports.jsxs("label", {
@@ -34196,25 +34262,74 @@
 	    }), /*#__PURE__*/jsxRuntime.exports.jsx("br", {}), /*#__PURE__*/jsxRuntime.exports.jsxs("label", {
 	      children: ["Enter the number of rounds:", /*#__PURE__*/jsxRuntime.exports.jsx("input", {
 	        placeholder: "numbers only?",
-	        type: "number"
+	        type: "number",
+	        min: "1",
+	        max: "20",
+	        value: props.round,
+	        onChange: handleChange,
+	        autoFocus: true
 	      })]
-	    }), /*#__PURE__*/jsxRuntime.exports.jsx("br", {}), /*#__PURE__*/jsxRuntime.exports.jsx("br", {})]
+	    }), /*#__PURE__*/jsxRuntime.exports.jsx("br", {}), /*#__PURE__*/jsxRuntime.exports.jsx("br", {}), /*#__PURE__*/jsxRuntime.exports.jsx("button", {
+	      onClick: handleClick,
+	      children: "Click me!"
+	    })]
 	  });
 	}
 
-	const App = () => {
-	  const [begin, setBegin] = react.exports.useState( /*#__PURE__*/jsxRuntime.exports.jsx(StartScreen, {}));
-	  return /*#__PURE__*/jsxRuntime.exports.jsxs("div", {
-	    children: [begin, /*#__PURE__*/jsxRuntime.exports.jsx("button", {
-	      id: "dissappear",
-	      onClick: () => {
-	        setBegin( /*#__PURE__*/jsxRuntime.exports.jsx(GamePlay, {}));
-	        document.getElementById('dissappear').style.display = 'none';
-	      },
-	      children: "start"
-	    })]
-	  });
-	};
+	function App(props) {
+	  const [round, setRound] = react.exports.useState(1);
+	  const [method, setMethod] = react.exports.useState(1);
+	  const [time, setTime] = react.exports.useState(Date.now());
+	  const [count, setCount] = react.exports.useState(1);
+
+	  const changeMethod = newMethod => {
+	    setMethod(newMethod);
+	  };
+
+	  const changeRounds = newRounds => {
+	    setRound(newRounds);
+	  };
+
+	  const changeCount = newCount => {
+	    setCount(newCount);
+	  };
+
+	  const reset = () => {
+	    if (props.count == props.round) {
+	      changeMethod(1);
+	      changeCount(1);
+	      setTime(Date.now());
+	    } // changeRounds(round);
+	    // changeMode(2);
+	    // changeCount(1);
+
+	  };
+
+	  switch (method) {
+	    case 1:
+	      return /*#__PURE__*/jsxRuntime.exports.jsx(StartScreen, {
+	        changeMethod: changeMethod,
+	        changeRounds: changeRounds,
+	        round: round
+	      });
+
+	    case 2:
+	      return /*#__PURE__*/jsxRuntime.exports.jsx(GamePlay, {
+	        changeRounds: changeRounds,
+	        round: round,
+	        count: count,
+	        changeCount: changeCount,
+	        changeMethod: changeMethod
+	      });
+
+	    case 3:
+	      return /*#__PURE__*/jsxRuntime.exports.jsx(GameOver, {
+	        time: time,
+	        reset: reset,
+	        count: count
+	      });
+	  }
+	}
 
 	const root = client.createRoot(document.getElementById('root'));
 	root.render( /*#__PURE__*/jsxRuntime.exports.jsx(React.StrictMode, {

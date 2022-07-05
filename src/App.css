@@ -8,3 +8,14 @@
     text-align: center;
     font: 32px Arial, sans-serif;
 }
+.circle{
+    border-radius: 50%;
+    width: 44px;
+    height: 54px;
+    padding: 10px;
+    background: #fff;
+    border: 2px solid pink;
+    color: #000;
+    text-align: center;
+    font: 32px Arial, sans-serif;
+}
