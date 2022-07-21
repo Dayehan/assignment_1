@@ -31,16 +31,26 @@
     "rollup-plugin-serve": "^1.1.0"
   },
   "scripts": {
-    "build": "rollup -c",
-    "build:watch": "rollup -c -w",
+    "build": "rollup --config rollup.config.js",
+    "build:watch": "rollup --config rollup.config.js --watch",
     "lint": "eslint src/",
-    "pretest": "eslint src/",
+    "fix" : "yarn run lint -- --fix",
+    "start": "rollup --config rollup.config.js --watch --environment START_BROWSER:true",
+    "prestart": "eslint --ignore-pattern LintFail.js src/",
+   
     "test": "mocha",
     "test:watch": "mocha -w"
   },
   "dependencies": {
     "prop-types": "^15.8.1",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "styled-components": "^5.3.5"
+  },
+  
+
+  "resolutions": {
+    "styled-components": "^5"
   }
+
 }

@@ -34186,29 +34186,36 @@
 	}
 
 	function GamePlay(props) {
-	  const firstNumber = Math.floor(Math.random() * 10);
-	  const secondNumber = Math.floor(Math.random() * 10);
+	  const firstNumber = Math.floor(Math.random() * 20);
+	  const secondNumber = Math.floor(Math.random() * 20);
 	  let sign;
 
 	  const result = () => {
-	    const choice = Math.floor(Math.random() * 2);
+	    const choice = Math.floor(Math.random() * 3);
 
 	    if (choice == 0) {
 	      sign = '+';
 	      return firstNumber + secondNumber;
-	    } else {
+	    } else if (choice == 1) {
 	      sign = '*';
 	      return firstNumber * secondNumber;
-	    }
+	    } else {
+	      sign = '-';
+	      return firstNumber - secondNumber;
+	    } //   } else {
+	    //     sign = '/';
+	    //     return (firstNumber / secondNumber);
+	    // } 
+
 	  };
 
 	  const answer = result();
 
 	  const handleInputChange = e => {
-	    if (answer == e.target.value && props.count < props.round) {
+	    if (answer.toString().length == e.target.value.toString().length && props.count < props.round) {
 	      e.target.value = "";
 	      props.changeCount(props.count + 1);
-	    } else if (answer == e.target.value && props.count == props.round) {
+	    } else if (answer.toString().length == e.target.value.toString().length && props.count == props.round) {
 	      props.changeMethod(3);
 	    }
 	  };

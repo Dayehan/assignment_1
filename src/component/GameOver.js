@@ -15,5 +15,5 @@ export default function GameOver(props) {
             
             <button id="start-button" onClick={handleClick} autoFocus>Play again?</button>
         </div>
-    );
+    )
 }
