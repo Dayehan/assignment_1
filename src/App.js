@@ -1,56 +1,52 @@
-import React , {useState} from 'react';
-import  GameOver  from './component/GameOver';
-import GamePlay from './component/GamePlay';
-import StartScreen from './component/StartScreen';
+import React, {useState} from "react";
 
+import StartGame from "./component/StartGame";
+import SolveQuestion from "./component/SolveQuestion";
+import GameEnd from "./component/GameEnd";
 
-function App(props) {
-    const [round, setRound] = useState(1);
-   
-    const [method, setMethod] = useState(1);
-
-    const [time, setTime]=useState(Date.now());
-
-    const [count,setCount]=useState(1);
-
-    const changeMethod = (newMethod) => {
-        setMethod(newMethod);
-    };
-
-    const changeRounds = (newRounds) => {
-        setRound(newRounds);
-    };
-    const changeCount=(newCount) => {
-        setCount(newCount);
-    };
-    
-    const reset= () => {
-        if ( props.count == props.round) {
-           
-            changeMethod(1);
-            changeCount(1)
-          
-          setTime(Date.now());
-        }
-        // changeRounds(round);
-        // changeMode(2);
-        // changeCount(1);
-     
-    }
-    
-
-
-    switch (method) {
-        case 1:
-            return <StartScreen changeMethod={changeMethod} changeRounds={changeRounds} round={round} />;
-        case 2:
-            return <GamePlay  changeRounds={changeRounds}  round={round} count={count} changeCount={changeCount}  changeMethod={changeMethod}/>;
-        case 3:
-            return <GameOver time={time}  reset={reset} count={count}  />
-
-
-    }
+function App() {
+ const [firstNumber , setFirstNumber] = useState(null);
+ const [secondNumber , setSecondNumber] = useState(null);
+ const [answer , setAnswer] = useState(null);
+ const [time , setTime] = useState(Date.now());
+ const [gameLevel , setGameLevel] = useState(1);
+ const [gameState , setGameState] = useState("START_GAME");
+ 
+ const generateNumber =() => {
+   setFirstNumber(Math.floor(Math.random() * 10));
+  setSecondNumber(Math.floor(Math.random() * 10));
+  setAnswer(this.firstNumber + this.secondNumber);
+ 
 }
 
-export default App;
+const start = () => {
+generateNumber();
+  setGameState("SOLVE_QUESTION");
+}
 
+validateAnswer(userAnswer){
+  if (userAnswer == this.answer && this.gameLevel < 3) {
+     generateNumber();
+      setGameState("SOLVE_QUESTION");
+      setGameLevel(gameLevel++);
+     
+  } else if (answer == this.answer && this.gameLevel >= 3) {
+    this.end();
+}
+
+}
+
+  switch (gameState) {
+    case "START_GAME": 
+     return <StartGame />;
+    case "SOLVE_QUESTION":
+        return <SolveQuestion firstNumber={firstNumber} secondNumber={secondNumber} answer={answer} />;
+    case "GAME_OVER":
+        return <GameEnd time={time}/>;
+}
+  
+    
+  }
+  
+
+export default App;

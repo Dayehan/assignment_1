@@ -1,23 +1,27 @@
-import React , {useState}  from 'react';
+import React , {useState} from 'react';
 // import 'public/style.css';
-
+import PropTypes, {string} from "prop-types";
 
  export default function StartScreen(props) {
   const [name , setName] = useState({
-    firstName : '',
+    firstName: '',
 });
 const handleClick = () => {
   props.changeMethod(2);
 };
+  
 
 const handleChange=(e)=>{
   props.changeRounds(e.target.value);
-}
+  
+};
 return (
     <div className="box" >
          <label>
              First name:
-         <input value={name.firstName} onChange={e => {setName({ name , firstName: e.target.value})} } />
+         <input value={name.firstName} onChange={(e) => {
+setName({name , firstName: e.target.value});
+} } />
 
          </label>
        
@@ -34,6 +38,12 @@ return (
 
 
     </div>
-)
+);
 }
+
+StartScreen.propTypes = {
+  round: PropTypes.number.isRequired,
+  changeRounds: PropTypes.func.isRequired,
+  changeMethod: PropTypes.func.isRequired
+};
 
