@@ -47,7 +47,7 @@ function StartGame(props) {
 StartGame.propTypes = {
   playGame: PropTypes.func.isRequired,
   maximumRound: PropTypes.number,
-  setMaximumRound: PropTypes.number.isRequired,
+  setMaximumRound: PropTypes.number,
 };
 StartGame.defaultProps = {
   maximumRound: PropTypes.number,

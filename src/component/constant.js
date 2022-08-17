@@ -2,8 +2,8 @@
 const SIGNS = [
     'ADD',
     'MINUS',
-    // 'MULTIPLY',
-    // 'DIVIDE'
+    'MULTIPLY',
+    'DIVIDE'
 ];
 const getRandomSign = () => {
     const randomNumber = Math.floor(Math.random() * SIGNS.length);
