@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import StartGame from "./component/StartGame";
 import SolveQuestion from "./component/SolveQuestion";
 import GameEnd from "./component/GameEnd";
-import { performOperation } from "./component/constant";
+import {performOperation} from "./component/constant";
 function App() {
   const [firstNumber, setFirstNumber] = useState(null);
   const [secondNumber, setSecondNumber] = useState(null);
