@@ -4,7 +4,7 @@ import RoundHistory from "./RoundHistory";
 
 function GameEnd(props) {
   const {
-    restart,
+    restartGame,
     time,
     expressionCollection,
 // begin
@@ -16,8 +16,7 @@ function GameEnd(props) {
       <p id="won">Congratulations you are a fabulous Mathematician!!! </p>
       <br></br>
       <p>GAME OVER! You spent {Date.now() - time} milliseconds playing</p>
-    
-      <button id="start-button" onClick={restart}>
+      <button id="start-button" onClick={restartGame}>
         REPLAY?
       </button>
     </div>
@@ -25,7 +24,7 @@ function GameEnd(props) {
 }
 GameEnd.propTypes = {
   time: PropTypes.number.isRequired,
-  restart: PropTypes.func.isRequired,
+  restartGame: PropTypes.func.isRequired,
   expressionCollection: PropTypes.array,
   
 };

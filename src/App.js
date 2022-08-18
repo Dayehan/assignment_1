@@ -1,18 +1,38 @@
-import React, {useState} from "react";
+import React, {useState, useReducer} from "react";
 
 import StartGame from "./component/StartGame";
 import SolveQuestion from "./component/SolveQuestion";
 import GameEnd from "./component/GameEnd";
 import {performOperation} from "./component/constant";
+import { GAME_STATE } from "./Hooks/utils";
+import {
+  reducer,
+  changeMaximumRound,
+  changeGameLevel,
+  changeGameState,
+  initialState
+} from "./Hooks/reducer"
+
 function App() {
+
+  const [state, dispatch] = useReducer(reducer,undefined,initialState); 
+
+  const setMaximumRound = (maximumRound) => dispatch(changeMaximumRound(maximumRound));
+  const setGameLevel = (gameLevel) => dispatch(changeGameLevel(gameLevel));
+  const setGameState = (gameState) => dispatch(changeGameState(gameState));
+   
+  const { maximumRound, gameLevel, gameState } = state
+
+
+
   const [firstNumber, setFirstNumber] = useState(null);
   const [secondNumber, setSecondNumber] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [operatorSign, setOperatorSign] = useState(null);
-  const [maximumRound, setMaximumRound] = useState("");
+  // const [maximumRound, setMaximumRound] = useState("");
   const [time] = useState(Date.now());
-  const [gameLevel, setGameLevel] = useState(1);
-  const [gameState, setGameState] = useState("START_GAME");
+  // const [gameLevel, setGameLevel] = useState(1);
+  // const [gameState, setGameState] = useState(GAME_STATE.START_GAME);
   const [expressionCollection, setExpressionCollection] = useState([]);
 
   const timer = Date.now();
@@ -43,8 +63,14 @@ function App() {
 
   const start = () => {
     generateNumber();
-    setGameState("SOLVE_QUESTION");
+    setGameState(GAME_STATE.PLAY_GAME);
   };
+
+  const restartGame = () => {
+    setExpressionCollection([]);
+    setMaximumRound(maximumRound);
+    setGameState(GAME_STATE.PLAY_GAME);
+  }
 
   const generateRoundExpression = (userAnswer) => {
     const recentTime = Date.now() - timer;
@@ -74,11 +100,11 @@ function App() {
   };
 
   const end = () => {
-    setGameState("GAME_OVER");
+    setGameState(GAME_STATE.GAME_OVER);
   };
 
   switch (gameState) {
-    case "START_GAME":
+    case GAME_STATE.START_GAME:
       return (
         <StartGame
           playGame={start}
@@ -86,7 +112,7 @@ function App() {
           setMaximumRound={setMaximumRound}
         />
       );
-    case "SOLVE_QUESTION":
+    case GAME_STATE.PLAY_GAME:
       return (
         <SolveQuestion
           firstNumber={firstNumber}
@@ -97,10 +123,10 @@ function App() {
           expressionCollection={expressionCollection}
         />
       );
-    case "GAME_OVER":
+    case GAME_STATE.GAME_OVER:
       return (
         <GameEnd
-          restart={start}
+          restartGame={restartGame}
           time={time}
           expressionCollection={expressionCollection}
           maximumRound={maximumRound}

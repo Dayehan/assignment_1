@@ -6,7 +6,11 @@ function StartGame(props) {
     firstName: "",
   });
   const handleChange = (e) => {
-    setMaximumRound(e.target.value);
+    const newMaximumRound = e.target.value;
+    //Validates that the user input a round within 1-20
+    if (newMaximumRound >= 1 && newMaximumRound <= 20){
+          setMaximumRound(newMaximumRound)
+        }  
   };
   return (
     <div className="container" id="play">
@@ -15,8 +19,10 @@ function StartGame(props) {
         <input
           value={name.firstName}
           onChange={(e) => {
-            setName({name, firstName: e.target.value});
-          }}
+    
+              setName({name, firstName: e.target.value});
+            }
+          }
         />
       </label>
       <br></br>

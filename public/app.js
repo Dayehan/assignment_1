@@ -35307,7 +35307,11 @@
 	  });
 
 	  const handleChange = e => {
-	    setMaximumRound(e.target.value);
+	    const newMaximumRound = e.target.value; //Validates that the user input a round within 1-20
+
+	    if (newMaximumRound >= 1 && newMaximumRound <= 20) {
+	      setMaximumRound(newMaximumRound);
+	    }
 	  };
 
 	  return /*#__PURE__*/jsxRuntime.exports.jsxs("div", {
@@ -37009,7 +37013,7 @@
 
 	function GameEnd(props) {
 	  const {
-	    restart,
+	    restartGame,
 	    time,
 	    expressionCollection // begin
 
@@ -37025,7 +37029,7 @@
 	      children: ["GAME OVER! You spent ", Date.now() - time, " milliseconds playing"]
 	    }), /*#__PURE__*/jsxRuntime.exports.jsx("button", {
 	      id: "start-button",
-	      onClick: restart,
+	      onClick: restartGame,
 	      children: "REPLAY?"
 	    })]
 	  });
@@ -37033,7 +37037,7 @@
 
 	GameEnd.propTypes = {
 	  time: propTypes.exports.number.isRequired,
-	  restart: propTypes.exports.func.isRequired,
+	  restartGame: propTypes.exports.func.isRequired,
 	  expressionCollection: propTypes.exports.array
 	};
 
@@ -37075,15 +37079,128 @@
 	  }
 	};
 
+	const GAME_STATE = {
+	  START_GAME: 'START_GAME',
+	  PLAY_GAME: 'SOLVE_QUESTION',
+	  GAME_OVER: 'GAME_OVER'
+	};
+	const REDUCER_HOOK = {
+	  CHANGE_MAXIMUM_ROUND: 'changeMaximumRound',
+	  CHANGE_GAME_LEVEL: 'changeGameLevel',
+	  CHANGE_GAME_STATE: 'changeGameState'
+	};
+
+	function ownKeys(object, enumerableOnly) {
+	  var keys = Object.keys(object);
+
+	  if (Object.getOwnPropertySymbols) {
+	    var symbols = Object.getOwnPropertySymbols(object);
+	    enumerableOnly && (symbols = symbols.filter(function (sym) {
+	      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+	    })), keys.push.apply(keys, symbols);
+	  }
+
+	  return keys;
+	}
+
+	function _objectSpread2(target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = null != arguments[i] ? arguments[i] : {};
+	    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+	      _defineProperty(target, key, source[key]);
+	    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+	      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+	    });
+	  }
+
+	  return target;
+	}
+
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+
+	  return obj;
+	}
+
+	const changeMaximumRound = newMaximumRound => ({
+	  type: REDUCER_HOOK.CHANGE_MAXIMUM_ROUND,
+	  payload: newMaximumRound
+	});
+	const changeGameLevel = newGameLevel => ({
+	  type: REDUCER_HOOK.CHANGE_GAME_LEVEL,
+	  payload: newGameLevel
+	});
+	const changeGameState = newGameState => ({
+	  type: REDUCER_HOOK.CHANGE_GAME_STATE,
+	  payload: newGameState
+	}); //SETTER
+
+	const setMaximumRound = (state, newMaximumRound) => _objectSpread2(_objectSpread2({}, state), {}, {
+	  maximumRound: newMaximumRound
+	});
+
+	const setGameLevel = (state, newGameLevel) => _objectSpread2(_objectSpread2({}, state), {}, {
+	  gameLevel: newGameLevel
+	});
+
+	const setGameState = (state, newGameState) => _objectSpread2(_objectSpread2({}, state), {}, {
+	  gameState: newGameState
+	}); // INITIAL STATE 
+
+
+	const initialState = () => ({
+	  maximumRound: '',
+	  gameLevel: 1,
+	  gameState: GAME_STATE.START_GAME
+	}); //SWITCH ACTION 
+
+	const reducer = (state, action) => {
+	  switch (action.type) {
+	    case REDUCER_HOOK.CHANGE_MAXIMUM_ROUND:
+	      return setMaximumRound(state, action.payload);
+
+	    case REDUCER_HOOK.CHANGE_GAME_LEVEL:
+	      return setGameLevel(state, action.payload);
+
+	    case REDUCER_HOOK.CHANGE_GAME_STATE:
+	      return setGameState(state, action.payload);
+
+	    default:
+	      throw new Error("Invalid");
+	  }
+	};
+
 	function App() {
+	  const [state, dispatch] = react.exports.useReducer(reducer, undefined, initialState);
+
+	  const setMaximumRound = maximumRound => dispatch(changeMaximumRound(maximumRound));
+
+	  const setGameLevel = gameLevel => dispatch(changeGameLevel(gameLevel));
+
+	  const setGameState = gameState => dispatch(changeGameState(gameState));
+
+	  const {
+	    maximumRound,
+	    gameLevel,
+	    gameState
+	  } = state;
 	  const [firstNumber, setFirstNumber] = react.exports.useState(null);
 	  const [secondNumber, setSecondNumber] = react.exports.useState(null);
 	  const [answer, setAnswer] = react.exports.useState(null);
-	  const [operatorSign, setOperatorSign] = react.exports.useState(null);
-	  const [maximumRound, setMaximumRound] = react.exports.useState("");
-	  const [time] = react.exports.useState(Date.now());
-	  const [gameLevel, setGameLevel] = react.exports.useState(1);
-	  const [gameState, setGameState] = react.exports.useState("START_GAME");
+	  const [operatorSign, setOperatorSign] = react.exports.useState(null); // const [maximumRound, setMaximumRound] = useState("");
+
+	  const [time] = react.exports.useState(Date.now()); // const [gameLevel, setGameLevel] = useState(1);
+	  // const [gameState, setGameState] = useState(GAME_STATE.START_GAME);
+
 	  const [expressionCollection, setExpressionCollection] = react.exports.useState([]);
 	  const timer = Date.now();
 	  const second = "MilliSeconds"; // const time = Date.now();
@@ -37113,7 +37230,13 @@
 
 	  const start = () => {
 	    generateNumber();
-	    setGameState("SOLVE_QUESTION");
+	    setGameState(GAME_STATE.PLAY_GAME);
+	  };
+
+	  const restartGame = () => {
+	    setExpressionCollection([]);
+	    setMaximumRound(maximumRound);
+	    setGameState(GAME_STATE.PLAY_GAME);
 	  };
 
 	  const generateRoundExpression = userAnswer => {
@@ -37145,18 +37268,18 @@
 	  };
 
 	  const end = () => {
-	    setGameState("GAME_OVER");
+	    setGameState(GAME_STATE.GAME_OVER);
 	  };
 
 	  switch (gameState) {
-	    case "START_GAME":
+	    case GAME_STATE.START_GAME:
 	      return /*#__PURE__*/jsxRuntime.exports.jsx(StartGame, {
 	        playGame: start,
 	        maximumRound: maximumRound,
 	        setMaximumRound: setMaximumRound
 	      });
 
-	    case "SOLVE_QUESTION":
+	    case GAME_STATE.PLAY_GAME:
 	      return /*#__PURE__*/jsxRuntime.exports.jsx(SolveQuestion, {
 	        firstNumber: firstNumber,
 	        secondNumber: secondNumber,
@@ -37166,9 +37289,9 @@
 	        expressionCollection: expressionCollection
 	      });
 
-	    case "GAME_OVER":
+	    case GAME_STATE.GAME_OVER:
 	      return /*#__PURE__*/jsxRuntime.exports.jsx(GameEnd, {
-	        restart: start,
+	        restartGame: restartGame,
 	        time: time,
 	        expressionCollection: expressionCollection,
 	        maximumRound: maximumRound,

@@ -25,9 +25,9 @@ function SolveQuestion(props) {
     useEffect(() => {
         setUserAnswer('');
     }, [gameLevel]);
+
     const changeInputValue = (e) => {
         setUserAnswer(e.target.value);
-
     };
     return (
       <div
